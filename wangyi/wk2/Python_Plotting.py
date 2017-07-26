@@ -6,7 +6,6 @@
 
 import xlrd
 import xlsxwriter
-
 import os
 from collections import defaultdict
 
@@ -54,7 +53,8 @@ def analyze_sheet(pos_words, neg_words, sheet):
             pos_list.append((sheet.row_values(0)[i+1],pos))
             neg_list.append((sheet.row_values(0)[i+1],neg))
     return pos_list, neg_list
-                      
+
+
 def save_into_excel(result_path, stock, annual_pos, annual_neg, interim_pos, interim_neg):
     workbook = xlsxwriter.Workbook(result_path + '/' + stock + '_summary.xls')
     Positive_Annual = workbook.add_worksheet("Positive_Annual")
@@ -92,6 +92,37 @@ def _write_sheet(sheet, data, flag):
         row += 1
         col = 1
 
+def _write_summary(workbook, sheet, annual_pos, annual_neg, interim_pos, interim_neg):
+    year_list = _year_list(annual_pos, interim_pos)
+    col = 1 
+    for year in year_list:
+        sheet.write(0, col, year)
+        col += 1
+    sheet.write(1,0, 'Positive(Annual)')
+    sheet.write(2,0, 'Negative(Annual)')
+    sheet.write(3,0, 'Positive-Negative(Annual)')
+    sheet.write(49,0, 'Positive(Interim)')
+    sheet.write(50,0, 'Negative(Interim)')
+    sheet.write(51,0, 'Positive-Negative(Interim)') 
+    row = 1
+    col = 1
+    for year in year_list:
+        annual_pos_freq  = _count_freq(annual_pos, year)
+        annual_neg_freq  = _count_freq(annual_neg, year)
+        interim_pos_freq = _count_freq(interim_pos, year)
+        interim_neg_freq = _count_freq(interim_neg, year)
+        sheet.write(row,      col, annual_pos_freq)
+        sheet.write(row + 1,  col, annual_neg_freq)
+        sheet.write(row + 2,  col, annual_pos_freq - annual_neg_freq)
+        sheet.write(row + 48, col, interim_pos_freq)
+        sheet.write(row + 49, col, interim_neg_freq)
+        sheet.write(row + 50, col, interim_pos_freq - interim_neg_freq)
+        col += 1
+    _draw_plot1(workbook, sheet, '=Summary!$B$1:$P$1', "=Summary!$A$2", '=Summary!$B$2:$P$2',  '=Summary!$A$3', '=Summary!$B$3:$P$3',  'Annual Report Plot', 'A5' )  
+    _draw_plot1(workbook, sheet, '=Summary!$B$1:$P$1', "=Summary!$A$50",'=Summary!$B$50:$P$50','=Summary!$A$51','=Summary!$B$51:$P$51','Interim Report Plot','A53')
+    _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$4', '=Summary!$B$4:$P$4', 'Annual','A27')
+    _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$52','=Summary!$B$52:$P$52','Interim','A75')
+
 def _year_list(annual, interim):
     s = set()
     for year_data in annual:
@@ -108,7 +139,7 @@ def _count_freq(data, year):
                 result += freq
             break
     return result
-    
+
 def _draw_plot1(workbook, sheet, cat, name1, val1, name2, val2, title, des):
     chart = workbook.add_chart({'type':'column'})
     chart.add_series({'name':name1, 'categories':cat, 'values':val1,})
@@ -117,7 +148,7 @@ def _draw_plot1(workbook, sheet, cat, name1, val1, name2, val2, title, des):
     chart.set_style(10)
     chart.set_size({'x_scale': 2.13, 'y_scale': 1.5})
     sheet.insert_chart(des, chart)
-    
+
 def _draw_plot2(workbook, sheet, cat, name, val, title, des):
     chart = workbook.add_chart({'type':'column'})
     chart.add_series({'name':name, 'categories':cat, 'values':val,})
@@ -127,51 +158,28 @@ def _draw_plot2(workbook, sheet, cat, name, val, title, des):
     sheet.insert_chart(des, chart)
 
 if __name__ == "__main__":
-    def _write_summary(workbook, sheet, annual_pos, annual_neg, interim_pos, interim_neg):
-        year_list = _year_list(annual_pos, interim_pos)
-        col = 1 
-        for year in year_list:
-            sheet.write(0, col, year)
-            col += 1
-        sheet.write(1,0, 'Positive(Annual)')
-        sheet.write(2,0, 'Negative(Annual)')
-        sheet.write(3,0, 'Positive-Negative(Annual)')
-        sheet.write(49,0, 'Positive(Interim)')
-        sheet.write(50,0, 'Negative(Interim)')
-        sheet.write(51,0, 'Positive-Negative(Interim)') 
-        row = 1
-        col = 1
-        for year in year_list:
-            annual_pos_freq  = _count_freq(annual_pos, year)
-            annual_neg_freq  = _count_freq(annual_neg, year)
-            interim_pos_freq = _count_freq(interim_pos, year)
-            interim_neg_freq = _count_freq(interim_neg, year)
-            sheet.write(row,      col, annual_pos_freq)
-            sheet.write(row + 1,  col, annual_neg_freq)
-            sheet.write(row + 2,  col, annual_pos_freq - annual_neg_freq)
-            sheet.write(row + 48, col, interim_pos_freq)
-            sheet.write(row + 49, col, interim_neg_freq)
-            sheet.write(row + 50, col, interim_pos_freq - interim_neg_freq)
-            col += 1
-        _draw_plot1(workbook, sheet, '=Summary!$B$1:$P$1', "=Summary!$A$2", '=Summary!$B$2:$P$2',  '=Summary!$A$3', '=Summary!$B$3:$P$3',  'Annual Report Plot', 'A5' )  
-        _draw_plot1(workbook, sheet, '=Summary!$B$1:$P$1', "=Summary!$A$50",'=Summary!$B$50:$P$50','=Summary!$A$51','=Summary!$B$51:$P$51','Interim Report Plot','A53')
-        _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$4', '=Summary!$B$4:$P$4', 'Annual','A27')
-        _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$52','=Summary!$B$52:$P$52','Interim','A75')
-
+ 
     root_path = "/usr/yyy/self testing/excel_freq/"
     result_path = "/usr/yyy/wk2/excel_summary/"
-    dictionary_path = "/usr/yyy/self testing/Dictionary.xlsx"   
+    dictionary_path = "/usr/yyy/self testing/Dictionary.xlsx"  
+    
     if not os.path.exists(result_path):
         os.mkdir(result_path)
     
     excel_list = os.listdir(root_path)
+    
     for file_name in excel_list:
         file_path = root_path + file_name
+        
         pos_words, neg_words = read_dictionary(dictionary_path)
+        
         sheet_annual, sheet_interim = read_excel(file_path)
+        
         annual_pos,  annual_neg  = analyze_sheet(pos_words, neg_words, sheet_annual)
         interim_pos, interim_neg = analyze_sheet(pos_words, neg_words, sheet_interim)
+        
         save_into_excel(result_path, file_name[:5], annual_pos, annual_neg, interim_pos, interim_neg)
+
         print file_name + ' save successfully.'
 
     print '-------------------Done-----------------------'

@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[15]:
 
 
 import MySQLdb
@@ -62,6 +62,7 @@ def _write_summary(workbook, sheet, stock, annual_pos, annual_neg, interim_pos, 
     _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$4', '=Summary!$B$4:$P$4',  '=Summary!$A$5', '=Summary!$B$5:$P$5',  'Positive-Negative and Price(Annual)', 'A28')
     _draw_plot2(workbook, sheet, '=Summary!$B$1:$P$1', '=Summary!$A$53','=Summary!$B$53:$P$53','=Summary!$A$54','=Summary!$B$54:$P$54','Positive-Negative and Price(Interim)','A77')
 
+# Drawing a line plot and a bar plot on a graph
 def _draw_plot2(workbook, sheet, cat, name1, val1, name2, val2, title, des):
     # Create a chart and a line chart
     chart = workbook.add_chart({'type':'column'})
@@ -108,13 +109,23 @@ def release_dates(stock_list, file_path, flag):
     data = xlrd.open_workbook(file_path)
     sheet = data.sheet_by_name(flag)
     stock_release_dates = dict()
+    
     for r in range(sheet.nrows):
         stock = ('00000'+str(sheet.cell(r, 0).value))[-7:-2]
+        
         if stock in stock_list:
             d = dict()
             for c in range(1, sheet.ncols, 1):
                 year = str(sheet.cell(0,c).value)[:-2]
-                Date = sheet.cell(r,c).value.split() 
+                value = sheet.cell(r,c).value
+                
+                if type(value) == unicode and '<br>' in value:
+                    Date = value.split('<br>')
+                elif type(value) == float:
+                    Date = []
+                else:
+                    Date = value.split()
+                print Date
                 if year == '':
                     year = '2017'
                 if Date == []:
@@ -169,34 +180,81 @@ def _converted_price(Date, stock, Stocks_Prices):
         return _converted_price(_converted_dates(Date), stock, Stocks_Prices)
     return float(data[-2])
 
+def prices(stock_list, stock_release_dates, Stocks_Prices):
+    pass
+
+def open_prices(stock_list, stock_release_dates, Stocks_Prices):
+    result = dict()
+    for stock in stock_list:
+        d = dict()
+        year = 2000
+        i = 0
+        for Date in sorted(stock_release_dates[stock].values()):
+            d[str(year+i)] = _converted_open_price(Date, stock, Stocks_Prices)
+            i+=1
+        result[stock] = d
+    return result
+
+def _converted_open_price(Date, stock, Stocks_Prices):
+    data = Stocks_Prices[stock][Date]
+    if date == tuple():
+        return converted_open_price(_converted_dates(Date), stock, Stocks_Prices)
+    return float(data[-5])
+    
+
+
 if __name__ == "__main__":
     conn = connect('172.31.238.166', 3306, 'root', 'root', 'stock')
     stock_list = ['00316','00590','01171']
     Stocks_Prices = stocks_prices(conn, stock_list)
     conn.close()
-    file_path = '/usr/yyy/wk2/reports release dates/'
-    annual_release = release_dates(stock_list, file_path + 'annual.xlsx','annual')
-    interim_release = release_dates(stock_list, file_path + 'interim.xlsx', 'interim')
+    release_date_path = '/usr/yyy/wk2/reports release dates/'
+    
+    #annual_release =  release_dates(stock_list, release_date_path + 'annual.xlsx','annual')
+    interim_release = release_dates(stock_list, release_date_path + 'interim.xlsx', 'interim')
+    
+    for stock_name in interim_release:
+        print stock_name
+        for year in sorted(interim_release[stock_name]):
+            print year, interim_release[stock_name][year]
+        print
+    
+
+    #
+    '''
     annual_prices =  prices(stock_list, annual_release,  Stocks_Prices)
     interim_prices = prices(stock_list, interim_release, Stocks_Prices)
     
     root_path = "/usr/yyy/self testing/excel_freq/"
     result_path = "/usr/yyy/wk2/excel_summary_with_price/"
-    dictionary_path = "/usr/yyy/self testing/Dictionary.xlsx" 
+    dictionary_path = "/usr/yyy/self testing/Dictionary.xlsx"
+    
     if not os.path.exists(result_path):
         os.mkdir(result_path)
 
     excel_list = os.listdir(root_path)
+    
     for file_name in excel_list:
+        
         file_path = root_path + file_name
+        
         pos_words, neg_words = read_dictionary(dictionary_path)
+        
         sheet_annual, sheet_interim = read_excel(file_path)
+        
         annual_pos,  annual_neg  = analyze_sheet(pos_words, neg_words, sheet_annual)
         interim_pos, interim_neg = analyze_sheet(pos_words, neg_words, sheet_interim)
+        
         workbook = xlsxwriter.Workbook(result_path + '/' + file_name[:5] + '_summary.xlsx')
+        
         save_into_excel(workbook, file_name[:5], annual_pos, annual_neg, interim_pos, interim_neg, annual_prices, interim_prices)
+        
         print file_name[:5] + ' saved successfully.'
-
+    '''
+    
+    
+    
+    
     print '----------------Done------------'
 
 
