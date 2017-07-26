@@ -49,8 +49,7 @@ def save_into_sheet(data, year, term, wbk):
             
     '''
     
-    sheet=wbk.add_sheet(term)
-    col=0
+    sheet=wbk.add_sheet(term)    col=0
     for i in range(1,len(data), 2):
         row=0
         sheet.write(row, col, 'word')
@@ -100,18 +99,18 @@ if __name__=='__main__':
     
     excel_list=os.listdir(root_path)
     for excel_name in excel_list:
-        #wbk=xlwt.Workbook()
+        wbk=xlwt.Workbook()
         stock = excel_name[:5]
         file_name = root_path + excel_name
         data_annual, data_interim = read_excel(file_name)
 
         res_data, year = countDiff1(data_annual)
-        #save_into_sheet(res_data, year, 'Annual', wbk)
+        save_into_sheet(res_data, year, 'Annual', wbk)
     
-        #res_data, year = countDiff1(data_interim)
-        #save_into_sheet(res_data, year, 'Interim', wbk)
+        res_data, year = countDiff1(data_interim)
+        save_into_sheet(res_data, year, 'Interim', wbk)
         
-        #wbk.save(result_path + stock + '_Diff.xls')
+        wbk.save(result_path + stock + '_Diff.xls')
         print stock, 'saved successfully.'
 
     print '-----------------Done------------------'
