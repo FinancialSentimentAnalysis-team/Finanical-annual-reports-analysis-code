@@ -58,7 +58,7 @@ def Func(current_close_price, future_close_price):
         return -1
     return 0
 
-def save_into_excel(stock_name, root_file_path, result_file_path, stock_list, annual_release, interim_release, Stocks_Prices):
+def save_into_excel(stock_name, root_file_path, result_file_path, stock_list, annual_release, interim_release, Stocks_Prices, delta_days_list):
     '''
     functionality: save the data into the result_file_path
     
@@ -69,6 +69,7 @@ def save_into_excel(stock_name, root_file_path, result_file_path, stock_list, an
            the annual reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the interim reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta days, such as [1, 7, 30, 90, 180]
            
     return: None
     
@@ -78,11 +79,11 @@ def save_into_excel(stock_name, root_file_path, result_file_path, stock_list, an
     workbook =  xlwt.Workbook()
     Annual = workbook.add_sheet("Annual")
     Interim = workbook.add_sheet("Interim")
-    _write_sheet(Annual,  data[0], 'Annual', stock_name, stock_list,  annual_release,  Stocks_Prices)
-    _write_sheet(Interim, data[1], 'Inteirm',stock_name, stock_list, interim_release, Stocks_Prices)
+    _write_sheet(Annual,  data[0], 'Annual', stock_name, stock_list,  annual_release,  Stocks_Prices, delta_days_list)
+    _write_sheet(Interim, data[1], 'Inteirm',stock_name, stock_list, interim_release, Stocks_Prices, delta_days_list)
     workbook.save(result_file_path)
 
-def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stocks_Prices):
+def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stocks_Prices, delta_days_list):
     '''
     functionality: stores the datum into the sheet
     
@@ -93,6 +94,7 @@ def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stock
            the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta days, such as [1, 7, 30, 90, 180]
            
     return: None
     
@@ -103,7 +105,7 @@ def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stock
     for year in sorted(datum):
         for c in datum[year]:
             category.add(c)
-    delta_days = [1,7,30,90,180]
+
     col = 1
     for c in category:
         sheet.col(col).width = 256*15
@@ -126,7 +128,7 @@ def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stock
         row += 1
     close_prices_current = _close_prices_after_release(stock_list, release_dates, Stocks_Prices, 0)[stock_name]
     
-    for delta_day in delta_days:
+    for delta_day in delta_days_list:
         close_prices_future  =  _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day)[stock_name]
         row = 1
         for year in range(2002, 2017):
