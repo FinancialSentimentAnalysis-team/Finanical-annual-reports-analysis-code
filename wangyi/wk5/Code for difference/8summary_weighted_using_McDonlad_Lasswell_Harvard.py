@@ -12,6 +12,7 @@ if __name__ == '__main__':
     root_path = '/usr/yyy/wk5/Count_Difference/'
     result_path = '/usr/yyy/wk5/Summary_Difference/'
     release_dates_path = '/usr/yyy/wk2/reports release dates/'
+    delta_days_list = [1, 7, 30, 90, 180] # a list of days after the report release date
     # ===================================================================
     
     dictionaries_names = ['McDonald', 'Lasswell', 'Harvard']
@@ -36,7 +37,7 @@ if __name__ == '__main__':
             root_file_path = root_path_for_this_dictionary + file_name
             result_file_path = result_path_for_this_dictionary + file_name[:5] +'_' + dictionary_name + '_difference_summary.xls'        
 
-            save_into_excel(file_name[:5], root_file_path, result_file_path, stock_list, annual_release, interim_release, Stocks_Prices)       
+            save_into_excel(file_name[:5], root_file_path, result_file_path, stock_list, annual_release, interim_release, Stocks_Prices, delta_days_list)       
             print file_name[:5] + ' completed \n'
         
         print 'Summary for ' + dictionary_name + ' is completed.\n\n'
