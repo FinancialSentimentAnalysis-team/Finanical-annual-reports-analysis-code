@@ -9,10 +9,10 @@ import re
 import os
 import threading
 
-def main(file_root, result_root):
-    for e_txt in os.listdir(file_root):
+def main(root_root, result_root):
+    for e_txt in os.listdir(root_root):
         try:        
-            f=open(file_root+e_txt, 'rU')
+            f=open(root_root+e_txt, 'rU')
             content=f.read()
             f.close()          
             
@@ -30,15 +30,15 @@ def main(file_root, result_root):
 if __name__=='__main__':
     # Edit Area
     # ===================================================================
-    # the file_path should contain txt files
-    file_path   = r'/usr/yyy/wk5/demo_68_txt/'
+    # The root_path should contain txt files.
+    root_path   = r'/usr/yyy/wk5/demo_68_txt/'
     result_path = r'/usr/yyy/wk5/txt_filtered/'
     # ===================================================================
     
     if not os.path.exists(result_path):
         os.mkdir(result_path)
     
-    main(file_path, result_path)
+    main(root_path, result_path)
     
     print '---------------------------Done---------------------------'
     
