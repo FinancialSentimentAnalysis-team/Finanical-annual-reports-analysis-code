@@ -231,10 +231,13 @@ def _open_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_d
 
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================   
     root_path = '/usr/yyy/wk5/Count/SentiWordSet/'
     result_path = '/usr/yyy/wk5/Summary/SentiWordSet/'
     release_dates_path = '/usr/yyy/wk2/reports release dates/'
     dictionary_path = '/usr/yyy/dictionaries/SentiWordNet_filtered.csv'
+    # ===================================================================   
     
     if not os.path.exists(result_path):
         os.mkdir(result_path)
