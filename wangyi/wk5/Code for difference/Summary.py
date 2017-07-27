@@ -69,6 +69,7 @@ def save_into_excel(stock_name, root_file_path, result_file_path, stock_list, an
            the annual reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the interim reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta days, such as [1, 7, 30, 90, 180]
            
     return: None
     
@@ -93,6 +94,7 @@ def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stock
            the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta days, such as [1, 7, 30, 90, 180]
            
     return: None
     
