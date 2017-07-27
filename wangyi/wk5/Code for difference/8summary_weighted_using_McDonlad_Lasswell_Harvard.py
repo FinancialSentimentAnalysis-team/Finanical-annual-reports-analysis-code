@@ -7,9 +7,13 @@
 from Summary import *
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================   
     root_path = '/usr/yyy/wk5/Count_Difference/'
     result_path = '/usr/yyy/wk5/Summary_Difference/'
     release_dates_path = '/usr/yyy/wk2/reports release dates/'
+    # ===================================================================
+    
     dictionaries_names = ['McDonald', 'Lasswell', 'Harvard']
     
     if not os.path.exists(result_path):
