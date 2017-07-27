@@ -8,13 +8,17 @@ import os
 import treetaggerwrapper
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================
     root_path   = r'/usr/yyy/wk5/txt_filtered/'
     result_path = r'/usr/yyy/wk5/txt_tagged/'
-
+    
+    # The TAGDIR should be the directory where you install the treetagger
+    tagger = treetaggerwrapper.TreeTagger(TAGDIR = '/usr/yyy/')
+    # ===================================================================
+    
     if not os.path.exists(result_path):
         os.mkdir(result_path)
-    
-    tagger = treetaggerwrapper.TreeTagger(TAGDIR = '/usr/yyy/')
 
     for file_name in os.listdir(root_path):
         
