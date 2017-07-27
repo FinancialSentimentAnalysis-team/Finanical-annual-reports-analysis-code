@@ -219,8 +219,11 @@ def _write_sheet(sheet, words, datum):
         col += 2
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================   
     root_path = '/usr/yyy/wk5/txt_tagged_init/'
     result_path = '/usr/yyy/wk5/excel_weighted/'
+    # =================================================================== 
     
     if not os.path.exists(result_path):
         os.mkdir(result_path)
