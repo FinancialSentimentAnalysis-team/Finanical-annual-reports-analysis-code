@@ -14,9 +14,12 @@ import re
 import os
 
 if __name__ == '__main__':
-   
+
+    # Edit Area
+    # ===================================================================   
     root_path=    r'/usr/yyy/wk5/txt_tagged/'
     result_path = r'/usr/yyy/wk5/txt_tagged_init/'
+    # ===================================================================
     
     if not os.path.exists(result_path):
         os.mkdir(result_path) 
