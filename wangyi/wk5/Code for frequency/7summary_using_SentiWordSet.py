@@ -108,7 +108,7 @@ def _modify_dict_for_SentiWordNet(d, category, sheet, pos_dictionary, neg_dictio
         if year != '2017':
             d[year][category] = s
 
-def save_into_excel_for_SentiWordNet(stock_name, result_path, data, stock_list, annual_release, interim_release, Stocks_Prices):
+def save_into_excel_for_SentiWordNet(stock_name, result_path, data, stock_list, annual_release, interim_release, Stocks_Prices, delta_days_list):
     '''
     functionality: save the information into an excel file
     
@@ -118,7 +118,8 @@ def save_into_excel_for_SentiWordNet(stock_name, result_path, data, stock_list, 
            the list of stocks you are interested in
            the annual reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the interim reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
-           the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)  
+           the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta_days, such as [1, 7, 30, 90, 180]
            
     return: None
      
@@ -127,11 +128,11 @@ def save_into_excel_for_SentiWordNet(stock_name, result_path, data, stock_list, 
     workbook =  xlwt.Workbook()
     Annual = workbook.add_sheet("Annual")
     Interim = workbook.add_sheet("Interim")
-    _write_sheet_for_SentiWordNet(Annual,  data[0], 'Annual', stock_name, stock_list,  annual_release,  Stocks_Prices)
-    _write_sheet_for_SentiWordNet(Interim, data[1], 'Inteirm',stock_name, stock_list, interim_release, Stocks_Prices)
+    _write_sheet_for_SentiWordNet(Annual,  data[0], 'Annual', stock_name, stock_list,  annual_release,  Stocks_Prices, delta_days_list)
+    _write_sheet_for_SentiWordNet(Interim, data[1], 'Inteirm',stock_name, stock_list, interim_release, Stocks_Prices, delta_days_list)
     workbook.save(result_path + stock_name +'_SentiWordSet_summary.xls')
 
-def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, release_dates, Stocks_Prices):
+def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, release_dates, Stocks_Prices, delta_days_list):
     '''
     functionality: stores the datum into the sheet
     
@@ -142,6 +143,7 @@ def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, rel
            the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)
            the stocks prices, detail in Stocks_Prices.stocks_prices(conn, stock_list)
+           a list of delta_days, such as [1, 7, 30, 90, 180]          
            
     return: None
     
@@ -149,7 +151,7 @@ def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, rel
    
     sheet.write(0,0, tag)
     category = ['positive', 'negative']
-    delta_days = [1,7,30,90,180]
+
     col = 1
     for c in category:
         sheet.col(col).width = 256*15
@@ -174,7 +176,7 @@ def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, rel
 
     close_prices_current = _close_prices_after_release(stock_list, release_dates, Stocks_Prices, 0)[stock_name]
     
-    for delta_day in delta_days:
+    for delta_day in delta_days_list:
         close_prices_future  =  _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day)[stock_name]
         row = 1
         for year in range(2002, 2017):
@@ -237,6 +239,7 @@ if __name__ == '__main__':
     result_path = '/usr/yyy/wk5/Summary/SentiWordSet/'
     release_dates_path = '/usr/yyy/wk2/reports release dates/'
     dictionary_path = '/usr/yyy/dictionaries/SentiWordNet_filtered.csv'
+    delta_days_list = [1, 7, 30, 90, 180] # a list of days after the report release date
     # ===================================================================   
     
     if not os.path.exists(result_path):
@@ -253,7 +256,7 @@ if __name__ == '__main__':
     for file_name in os.listdir(root_path):
         data = read_excel_for_SentiWordNet(root_path + file_name, pos_dictionary, neg_dictionary)
         
-        save_into_excel_for_SentiWordNet(file_name[:5], result_path, data, stock_list, annual_release, interim_release, Stocks_Prices)
+        save_into_excel_for_SentiWordNet(file_name[:5], result_path, data, stock_list, annual_release, interim_release, Stocks_Prices, delta_days_list)
         
         print file_name[:5] + ' completed\n'
 
