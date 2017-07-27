@@ -1,4 +1,5 @@
 
+
 # coding: utf-8
 
 # In[1]:
@@ -27,9 +28,12 @@ def main(file_root, result_root):
             print 'handle file: %s error!' % e_txt
 
 if __name__=='__main__':
+    # Edit Area
+    # ===================================================================
     # the file_path should contain txt files
     file_path   = r'/usr/yyy/wk5/demo_68_txt/'
     result_path = r'/usr/yyy/wk5/txt_filtered/'
+    # ===================================================================
     
     if not os.path.exists(result_path):
         os.mkdir(result_path)
