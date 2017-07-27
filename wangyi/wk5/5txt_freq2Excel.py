@@ -52,9 +52,12 @@ def save_data_into_excel(flag, sheet_name, file_data, file_name, root_path):
         col +=2
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================   
     root_path = '/usr/yyy/wk5/txt_freq/'
     result_path = '/usr/yyy/wk5/excel_freq/'
-
+    # ===================================================================   
+    
     if not os.path.exists(result_path):
         os.mkdir(result_path)
         
