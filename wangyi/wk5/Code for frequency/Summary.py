@@ -141,7 +141,7 @@ def _write_sheet(sheet, datum, tag, stock_name, stock_list, release_dates, Stock
 
 def _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day):
     '''
-    functionality: provides the close prices for all the stocks you interested in
+    functionality: provides the close prices for all the stocks you are interested in
     
     input: the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)        
@@ -162,7 +162,7 @@ def _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_
 
 def _open_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day):
     '''
-    functionality: provides the open prices for all the stocks you interested in
+    functionality: provides the open prices for all the stocks you are interested in
     
     input: the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)        
@@ -183,7 +183,8 @@ def _open_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_d
 
 def get_Stocks_Prices(stock_list):
     '''
-    functionality: for fast accessing the database that has the information of stocks prices
+    functionality: assuming the information of stocks prices store in a constant place,
+                   you can easily access the database that has the information of stocks prices
     
     input: the list of stocks you are interested in
 
