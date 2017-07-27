@@ -189,7 +189,7 @@ def _write_sheet_for_SentiWordNet(sheet, datum, tag, stock_name, stock_list, rel
 
 def _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day):
     '''
-    functionality: provides the close prices for all the stocks you interested in
+    functionality: provides the close prices for all the stocks you are interested in
     
     input: the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)        
@@ -210,7 +210,7 @@ def _close_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_
 
 def _open_prices_after_release(stock_list, release_dates, Stocks_Prices, delta_day):
     '''
-    functionality: provides the open prices for all the stocks you interested in
+    functionality: provides the open prices for all the stocks you are interested in
     
     input: the list of stocks you are interested in
            the stock reports release information, detail in Stocks_Prices.release_dates(stock_list, file_path, flag)        
