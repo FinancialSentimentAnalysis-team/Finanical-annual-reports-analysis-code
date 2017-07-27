@@ -7,11 +7,14 @@
 from Count import *
 
 if __name__ == '__main__':
+    # Edit Area
+    # ===================================================================   
     root_path = '/usr/yyy/wk5/excel_diff/'
     result_path = '/usr/yyy/wk5/Count_Difference/'
     Harvard_dictionary = '/usr/yyy/dictionaries/Harvard IV-4 converted/'    
     Lasswell_dictionary = '/usr/yyy/dictionaries/Lasswell dictionary converted/'
     McDonald_dictionary = '/usr/yyy/dictionaries/McDonald sentiment dictionary/'
+    # ===================================================================   
     
     dictionaries = [('Harvard', Harvard_dictionary), ('Lasswell', Lasswell_dictionary), ('McDonald', McDonald_dictionary)]
 
