@@ -12,10 +12,12 @@ if __name__ == '__main__':
     # ===================================================================
     root_path   = r'/usr/yyy/wk5/txt_filtered/'
     result_path = r'/usr/yyy/wk5/txt_tagged/'
+    Tagger_path = '/usr/yyy/'  # 这个路径是tree tagger的安装路径，linux 系统下载方式 http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/ 
+    # ===================================================================
+    
     
     # The TAGDIR should be the directory where you install the treetagger
-    tagger = treetaggerwrapper.TreeTagger(TAGDIR = '/usr/yyy/')
-    # ===================================================================
+    tagger = treetaggerwrapper.TreeTagger(TAGDIR = Tagger_path)
     
     if not os.path.exists(result_path):
         os.mkdir(result_path)
