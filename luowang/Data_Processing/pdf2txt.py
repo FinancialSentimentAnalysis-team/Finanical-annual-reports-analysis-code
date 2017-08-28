@@ -27,7 +27,7 @@ def pdfTotxt1(pdf_path, txt_path):
      
     ### check whether the target txt path is exist ##########
     if not os.path.exists(txt_path):
-        os.path.mkdir(txt_path)
+        os.mkdir(txt_path)
         
     
    
@@ -73,7 +73,7 @@ def pdfTotxt2(pdf_path, txt_path) :
      
     ### check whether the target txt path is exist ##########
     if not os.path.exists(txt_path):
-        os.path.mkdir(txt_path)
+        os.mkdir(txt_path)
       
     content =''
     try:
